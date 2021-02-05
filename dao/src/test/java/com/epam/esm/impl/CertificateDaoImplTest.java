@@ -2,6 +2,8 @@ package com.epam.esm.impl;
 
 import com.epam.esm.CertificateDao;
 import com.epam.esm.GiftCertificate;
+import com.epam.esm.exception.NoSuchResourceException;
+import com.epam.esm.exception.NoUserTag;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,7 +25,10 @@ class CertificateDaoImplTest {
 
     private CertificateDao certificateDao;
 
-    private GiftCertificate giftCertificate = new GiftCertificate("Spa-comlex", "Spa-complex for 1 person for 3 hours", new BigDecimal(150), 40, LocalDateTime.of(2021, 01, 20, 13, 06, 22), LocalDateTime.of(2021, 01, 20, 13, 06, 22));
+    private GiftCertificate giftCertificate = new GiftCertificate("Spa-comlex"
+            , "Spa-complex for 1 person for 3 hours", new BigDecimal(150)
+            , 40, LocalDateTime.of(2021, 01, 20, 13, 06, 22)
+            , LocalDateTime.of(2021, 01, 20, 13, 06, 22));
 
     @BeforeEach
     public void setUp() {
@@ -53,8 +58,9 @@ class CertificateDaoImplTest {
     @Test
     void findCertificateByIdWrong() {
         long id = 31254;
-        GiftCertificate certificate = certificateDao.findCertificateById(id);
-        Assertions.assertNull(certificate);
+        Throwable throwable = Assertions.assertThrows(NoSuchResourceException.class, () ->
+                certificateDao.findCertificateById(id));
+        Assertions.assertEquals(NoSuchResourceException.class, throwable.getClass());
     }
 
     @Test
@@ -76,8 +82,9 @@ class CertificateDaoImplTest {
     @Test
     void updateCertificateWrongId() {
         long id = 3456;
-        Integer number = certificateDao.updateCertificate(giftCertificate, id);
-        Assertions.assertEquals(0, number);
+        Throwable throwable = Assertions.assertThrows(NoSuchResourceException.class, () ->
+                certificateDao.updateCertificate(giftCertificate, id));
+        Assertions.assertEquals(NoSuchResourceException.class, throwable.getClass());
     }
 
     @Test
@@ -92,10 +99,10 @@ class CertificateDaoImplTest {
     @Test
     void deleteCertificateWrongId() {
         long id = 221548;
-        Integer number = certificateDao.deleteCertificate(id);
-        Assertions.assertNotNull(number);
-        Assertions.assertEquals(0, number);
-
+        Throwable throwable = Assertions.assertThrows(NoSuchResourceException.class, () -> {
+            certificateDao.findCertificateById(id);
+        });
+        Assertions.assertEquals(NoSuchResourceException.class, throwable.getClass());
     }
 
     @Test
@@ -104,11 +111,14 @@ class CertificateDaoImplTest {
         List<GiftCertificate> list = certificateDao.findCertificatesByTag(tag);
         Assertions.assertNotNull(list);
         Assertions.assertEquals(2, list.size());
+    }
 
-        String wrongTag = "carmen";
-        List<GiftCertificate> wrongList = certificateDao.findCertificatesByTag(wrongTag);
-        Assertions.assertNotNull(wrongList);
-        Assertions.assertTrue(wrongList.isEmpty());
+    @Test
+    void findCertificatesByTagWrongTag() {
+        String tag = "carmen";
+        Throwable throwable = Assertions.assertThrows(NoUserTag.class, () ->
+                certificateDao.findCertificatesByTag(tag));
+        Assertions.assertEquals(NoUserTag.class, throwable.getClass());
     }
 
     @Test

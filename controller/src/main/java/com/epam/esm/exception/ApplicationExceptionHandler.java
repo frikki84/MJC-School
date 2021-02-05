@@ -74,6 +74,17 @@ public class ApplicationExceptionHandler {
         return new ResponseEntity<>(data, status);
     }
 
+    @ExceptionHandler(NoCertificatesWithName.class)
+    public ResponseEntity<ExceptionDetails> handleNoCertificatesWithName(NoCertificatesWithName exception) {
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        String message = getErrorResponse(NO_CERTIFICATE);
+        String errorCode = status.value()+ exception.getCode();
+        ExceptionDetails data = new ExceptionDetails(LocalDateTime.now()
+                , status.value(), message, errorCode);
+
+        return new ResponseEntity<>(data, status);
+    }
+
     @ExceptionHandler(TagValidationException.class)
     public ResponseEntity<ExceptionDetails> handleTagValidationException(TagValidationException exception) {
         HttpStatus status = HttpStatus.BAD_REQUEST;

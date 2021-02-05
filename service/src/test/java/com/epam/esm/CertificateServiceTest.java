@@ -1,5 +1,6 @@
 package com.epam.esm;
 
+import com.epam.esm.exception.NoSuchResourceException;
 import com.epam.esm.mapper.CertificateDtoMapper;
 import com.epam.esm.util.CustomErrorCode;
 import org.junit.jupiter.api.Assertions;
@@ -109,18 +110,6 @@ class CertificateServiceTest {
         Assertions.assertNotNull(number);
         Assertions.assertEquals(1, number);
     }
-
-    @Test
-    void deleteCertificateNoSuchResourceExceptionTest() {
-        long id = 100;
-        Mockito.when(certificateDao.findCertificateById(id)).thenThrow(new NoSuchResourceException(CustomErrorCode.CERTIFICATE));
-        Throwable throwable = Assertions.assertThrows(NoSuchResourceException.class, () -> {
-            certificateService.deleteCertificate(id);
-        });
-        Assertions.assertEquals(NoSuchResourceException.class, throwable.getClass());
-    }
-
-
 
 
 }

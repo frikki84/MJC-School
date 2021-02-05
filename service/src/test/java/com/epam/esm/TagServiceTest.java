@@ -1,6 +1,7 @@
 package com.epam.esm;
 
 import com.epam.esm.dto.TagDto;
+import com.epam.esm.exception.NoSuchResourceException;
 import com.epam.esm.exception.TagAlreadyExistsException;
 import com.epam.esm.mapper.TagDtoMapper;
 import com.epam.esm.util.CustomErrorCode;
@@ -38,6 +39,16 @@ class TagServiceTest {
     }
 
     @Test
+    void testFindTagById() {
+        long id = 1;
+        Mockito.when(tagDao.findTag(id)).thenReturn(expectedTag);
+        Tag tag = tagService.findTag(id);
+        Assertions.assertNotNull(tag);
+        Assertions.assertEquals(expectedTag, tag);
+
+    }
+
+    @Test
     void findTagException() {
         long id = 100;
         Mockito.when(tagDao.findTag(id)).thenThrow(new NoSuchResourceException(CustomErrorCode.TAG));
@@ -67,16 +78,6 @@ class TagServiceTest {
         Assertions.assertEquals(1, number);
     }
 
-    @Test
-    void deleteTagException() {
-        long id = 100;
-        Mockito.when(tagDao.deleteTag(id)).thenThrow(new NoSuchResourceException(CustomErrorCode.TAG));
-        Throwable throwable = Assertions.assertThrows(NoSuchResourceException.class, () -> {
-            tagService.findTag(id);
-        });
-        Assertions.assertEquals(NoSuchResourceException.class, throwable.getClass());
-
-    }
 
     @Test
     void addNewTag() {
@@ -86,17 +87,6 @@ class TagServiceTest {
         Tag tag = tagService.addNewTag(tagDto);
         Assertions.assertNotNull(tag);
         Assertions.assertEquals(expectedTag, tag);
-    }
-
-    @Test
-    void addNewTagException() {
-        TagDto tagDto = new TagDto("children");
-        Mockito.when(tagDtoMapper.changeTagDtoToTag(tagDto)).thenReturn(existedTag);
-        Mockito.when(tagDao.addNewTag(expectedTag)).thenThrow(new TagAlreadyExistsException(CustomErrorCode.TAG));
-        Throwable throwable = Assertions.assertThrows(TagAlreadyExistsException.class, () -> {
-            tagService.addNewTag(tagDto);
-        });
-        Assertions.assertEquals(NoSuchResourceException.class, throwable.getClass());
     }
 
 

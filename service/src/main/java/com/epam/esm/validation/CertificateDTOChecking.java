@@ -23,7 +23,7 @@ public class CertificateDTOChecking {
             throw new InvalidCertificateDtoTagList(CustomErrorCode.CERTIFICATE);
         }
 
-        return  true;
+        return  result;
     }
 
 }

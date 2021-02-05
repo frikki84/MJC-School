@@ -2,6 +2,7 @@ package com.epam.esm.impl;
 
 import com.epam.esm.CertificateDao;
 import com.epam.esm.GiftCertificate;
+import com.epam.esm.exception.NoCertificatesWithName;
 import com.epam.esm.exception.NoSuchResourceException;
 import com.epam.esm.exception.NoUserTag;
 import com.epam.esm.util.CustomErrorCode;
@@ -131,6 +132,7 @@ public class CertificateDaoImpl implements CertificateDao {
     public List<GiftCertificate> findCertificatesByNameOrDescriptionPart(String namePart) {
         List<GiftCertificate> certificateList = new ArrayList<>();
         Map<String, Object> out = searchCertificatesWithTags(namePart);
+        System.out.println("Map" + out);
         List<Map<String, Object>> results = (List<Map<String, Object>>) out.get(MAP_KEY_NAME_PROCEDURE);
         results.stream().forEach(c -> {
             GiftCertificate ct = new GiftCertificate();
@@ -149,7 +151,7 @@ public class CertificateDaoImpl implements CertificateDao {
 
     private Map<String, Object> searchCertificatesWithTags(String namePart) {
         List<SqlParameter> parameters = Arrays.asList(new SqlParameter(Types.NVARCHAR));
-        return template.call(new CallableStatementCreator() {
+        Map<String, Object> resultMap = template.call(new CallableStatementCreator() {
             @Override
             public CallableStatement createCallableStatement(Connection con) throws SQLException {
                 CallableStatement cs = con.prepareCall(DB_PROCEDURE_CALL);
@@ -157,6 +159,8 @@ public class CertificateDaoImpl implements CertificateDao {
                 return cs;
             }
         }, parameters);
+
+        return resultMap;
     }
 
 }
