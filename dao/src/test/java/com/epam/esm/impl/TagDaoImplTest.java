@@ -2,91 +2,90 @@ package com.epam.esm.impl;
 
 import com.epam.esm.Tag;
 import com.epam.esm.TagDao;
+import com.epam.esm.config.TestConfiguration;
 import com.epam.esm.exception.NoSuchResourceException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.security.PublicKey;
 import java.util.List;
 
 
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = TestConfiguration.class)
+@ActiveProfiles("dev")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class TagDaoImplTest {
+    public static final int LIST_SIZE_FIND_ALL_TAG_LIST = 6;
+    public static final int ID_FIND_TAG_BY_ID = 3;
+    public static final int ID_FIND_TAG_BY_ID_EXCEPTION = 1000;
+    public static final String NAME_FIND_TAG_BY_NAME = "spa";
+    public static final String NAME_FIND_TAG_BY_NAME_EXCEPTION = "disco";
+    public static final Tag NEW_TAG_ADD_NEW_TAG = new Tag(7, "swimming");
+    public static final int CERTIFICATE_ID_FIND_TAGS_BY_CERTIFICATE_ID= 36;
 
-    private EmbeddedDatabase embeddedDatabase;
-    private JdbcTemplate jdbcTemplate;
+    @Autowired
     private TagDao tagDao;
-
-    @BeforeEach
-    public void setUp() {
-        embeddedDatabase = new EmbeddedDatabaseBuilder()
-                .setType(EmbeddedDatabaseType.H2)
-                .addScript("mydb.sql")
-                .build();
-        jdbcTemplate = new JdbcTemplate(embeddedDatabase);
-        tagDao = new TagDaoImpl(jdbcTemplate);
-    }
-
 
     @Test
     void testFindAllTagList() {
-        System.out.println(tagDao);
         Assertions.assertNotNull(tagDao.findAllTagList());
-        Assertions.assertEquals(6, tagDao.findAllTagList().size());
+        Assertions.assertEquals(LIST_SIZE_FIND_ALL_TAG_LIST, tagDao.findAllTagList().size());
     }
 
     @Test
     void testFindTagById() {
-        Assertions.assertNotNull(tagDao.findTag(3));
+        Assertions.assertNotNull(tagDao.findTag(ID_FIND_TAG_BY_ID));
     }
 
     @Test
     void testFindTagByIdException() {
-        long id = 1000;
         Throwable throwable = Assertions.assertThrows(NoSuchResourceException.class, () -> {
-            tagDao.findTag(id);
+            tagDao.findTag(ID_FIND_TAG_BY_ID_EXCEPTION);
         });
         Assertions.assertEquals(NoSuchResourceException.class, throwable.getClass());
     }
 
     @Test
     void testFindTagByName() {
-        Assertions.assertNotNull(tagDao.findTag("spa"));
+        Assertions.assertNotNull(tagDao.findTag(NAME_FIND_TAG_BY_NAME));
     }
 
     @Test
     void testFindTagByNameException() {
-        String tagName = "lalala";
         Throwable throwable = Assertions.assertThrows(NoSuchResourceException.class, () -> {
-            tagDao.findTag(tagName);
+            tagDao.findTag(NAME_FIND_TAG_BY_NAME_EXCEPTION);
         });
         Assertions.assertEquals(NoSuchResourceException.class, throwable.getClass());
     }
 
     @Test
     void testAddNewTag() {
-        Tag tag = tagDao.addNewTag(new Tag(7, "swimming"));
+        Tag tag = NEW_TAG_ADD_NEW_TAG;
         Assertions.assertNotNull(tag);
-        Assertions.assertNotNull(tag.getId());
-        Assertions.assertEquals(tag, new Tag(7, "swimming"));
+        Assertions.assertEquals(tag.getId(), NEW_TAG_ADD_NEW_TAG.getId());
 
     }
 
 
     @Test
     void testFindTagsByCertificateId() {
-        long certIdWrong = 52;
-        List<Tag> tagList = tagDao.findTagsByCertificateId(certIdWrong);
+        List<Tag> tagList = tagDao.findTagsByCertificateId(CERTIFICATE_ID_FIND_TAGS_BY_CERTIFICATE_ID);
         Assertions.assertNotNull(tagList);
         Assertions.assertTrue(tagList.isEmpty());
     }
 
-    @AfterEach
-    public void endTest() {
-        embeddedDatabase.shutdown();
-    }
 
 }

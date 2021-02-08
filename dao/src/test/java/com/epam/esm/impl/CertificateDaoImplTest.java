@@ -1,6 +1,7 @@
 package com.epam.esm.impl;
 import com.epam.esm.CertificateDao;
 import com.epam.esm.GiftCertificate;
+import com.epam.esm.Tag;
 import com.epam.esm.config.TestConfiguration;
 import com.epam.esm.exception.NoSuchResourceException;
 import com.epam.esm.exception.NoUserTag;
@@ -23,35 +24,42 @@ import java.util.List;
 @ActiveProfiles("dev")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class CertificateDaoImplTest {
-
-    @Autowired
-    private CertificateDao certificateDao;
+    public static final int LIST_SIZE_FIND_ALL_CERTIFICATES = 4;
+    public static final int ID_FIND_CERTIFICATE_BY_ID = 3;
+    public static final int ID_FIND_CERTIFICATE_BY_ID_EXCEPTION = 1000;
+    public static final int NEW_CERTIFICATE_ID = 5;
+    public static final int UPDATED_CERTIFICATE_ID = 3;
+    public static final int UPDATED_DB_FILDS_NUMBER= 1;
+    public static final int UPDATED_CERTIFICATE_WRONG_ID = 3000;
+    public static final String TAG_NAME = "sport";
+    public static final String WRONG_TAG_NAME = "ROMM";
 
     private GiftCertificate giftCertificate = new GiftCertificate("Spa-comlex"
             , "Spa-complex for 1 person for 3 hours", new BigDecimal(150)
             , 40, LocalDateTime.of(2021, 01, 20, 13, 06, 22)
             , LocalDateTime.of(2021, 01, 20, 13, 06, 22));
 
+    @Autowired
+    private CertificateDao certificateDao;
+
     @Test
     void findAllCertificates() {
         List<GiftCertificate> list = certificateDao.findAllCertificates();
         Assertions.assertNotNull(list);
-        Assertions.assertEquals(4, list.size());
+        Assertions.assertEquals(LIST_SIZE_FIND_ALL_CERTIFICATES, list.size());
     }
 
     @Test
     void findCertificateById() {
-        long id = 3;
-        GiftCertificate certificate = certificateDao.findCertificateById(id);
+        GiftCertificate certificate = certificateDao.findCertificateById(ID_FIND_CERTIFICATE_BY_ID);
         Assertions.assertNotNull(certificate);
-        Assertions.assertEquals(id, certificate.getId());
+        Assertions.assertEquals(ID_FIND_CERTIFICATE_BY_ID, certificate.getId());
     }
 
     @Test
     void findCertificateByIdWrong() {
-        long id = 31254;
         Throwable throwable = Assertions.assertThrows(NoSuchResourceException.class, () ->
-                certificateDao.findCertificateById(id));
+                certificateDao.findCertificateById(ID_FIND_CERTIFICATE_BY_ID_EXCEPTION));
         Assertions.assertEquals(NoSuchResourceException.class, throwable.getClass());
     }
 
@@ -59,57 +67,51 @@ class CertificateDaoImplTest {
     void createNewCertificate() {
         Integer id = certificateDao.createNewCertificate(giftCertificate);
         Assertions.assertNotNull(id);
-        Assertions.assertEquals(5, id);
+        Assertions.assertEquals(NEW_CERTIFICATE_ID, id);
     }
 
     @Test
     void updateCertificate() {
-        long id = 3;
-        Integer number = certificateDao.updateCertificate(giftCertificate, id);
+        Integer number = certificateDao.updateCertificate(giftCertificate, UPDATED_CERTIFICATE_ID);
         Assertions.assertNotNull(number);
-        Assertions.assertEquals(1, number);
-        Assertions.assertEquals(giftCertificate.getName(), certificateDao.findCertificateById(id).getName());
+        Assertions.assertEquals(UPDATED_DB_FILDS_NUMBER, number);
+        Assertions.assertEquals(giftCertificate.getName(), certificateDao.findCertificateById(UPDATED_CERTIFICATE_ID).getName());
     }
 
     @Test
     void updateCertificateWrongId() {
-        long id = 3456;
-        Throwable throwable = Assertions.assertThrows(NoSuchResourceException.class, () ->
-                certificateDao.updateCertificate(giftCertificate, id));
+         Throwable throwable = Assertions.assertThrows(NoSuchResourceException.class, () ->
+                certificateDao.updateCertificate(giftCertificate, UPDATED_CERTIFICATE_WRONG_ID));
         Assertions.assertEquals(NoSuchResourceException.class, throwable.getClass());
     }
 
     @Test
     void deleteCertificate() {
-        long id = 2;
-        Integer number = certificateDao.deleteCertificate(id);
+        Integer number = certificateDao.deleteCertificate(UPDATED_CERTIFICATE_ID);
         Assertions.assertNotNull(number);
-        Assertions.assertEquals(1, number);
+        Assertions.assertEquals(UPDATED_DB_FILDS_NUMBER, number);
 
     }
 
     @Test
     void deleteCertificateWrongId() {
-        long id = 221548;
         Throwable throwable = Assertions.assertThrows(NoSuchResourceException.class, () -> {
-            certificateDao.findCertificateById(id);
+            certificateDao.findCertificateById(UPDATED_CERTIFICATE_WRONG_ID);
         });
         Assertions.assertEquals(NoSuchResourceException.class, throwable.getClass());
     }
 
     @Test
     void findCertificatesByTag() {
-        String tag = "sport";
-        List<GiftCertificate> list = certificateDao.findCertificatesByTag(tag);
+              List<GiftCertificate> list = certificateDao.findCertificatesByTag(TAG_NAME);
         Assertions.assertNotNull(list);
         Assertions.assertEquals(2, list.size());
     }
 
     @Test
     void findCertificatesByTagWrongTag() {
-        String tag = "carmen";
         Throwable throwable = Assertions.assertThrows(NoUserTag.class, () ->
-                certificateDao.findCertificatesByTag(tag));
+                certificateDao.findCertificatesByTag(WRONG_TAG_NAME));
         Assertions.assertEquals(NoUserTag.class, throwable.getClass());
     }
 
@@ -117,7 +119,7 @@ class CertificateDaoImplTest {
     void findCertificatesOrderedByNameAsc() {
         List<GiftCertificate> list = certificateDao.findCertificatesOrderedByNameAsc();
         Assertions.assertNotNull(list);
-        Assertions.assertEquals(4, list.size());
+        Assertions.assertEquals(LIST_SIZE_FIND_ALL_CERTIFICATES, list.size());
         Assertions.assertEquals(list.get(0).getId(), 3);
         Assertions.assertEquals(list.get(list.size()-1).getId(), 2);
     }
