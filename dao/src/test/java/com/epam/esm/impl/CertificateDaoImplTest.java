@@ -1,44 +1,36 @@
 package com.epam.esm.impl;
-
 import com.epam.esm.CertificateDao;
 import com.epam.esm.GiftCertificate;
+import com.epam.esm.config.TestConfiguration;
 import com.epam.esm.exception.NoSuchResourceException;
 import com.epam.esm.exception.NoUserTag;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
 
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = TestConfiguration.class)
+@ActiveProfiles("dev")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class CertificateDaoImplTest {
-    private EmbeddedDatabase embeddedDatabase;
 
-    private JdbcTemplate jdbcTemplate;
-
+    @Autowired
     private CertificateDao certificateDao;
 
     private GiftCertificate giftCertificate = new GiftCertificate("Spa-comlex"
             , "Spa-complex for 1 person for 3 hours", new BigDecimal(150)
             , 40, LocalDateTime.of(2021, 01, 20, 13, 06, 22)
             , LocalDateTime.of(2021, 01, 20, 13, 06, 22));
-
-    @BeforeEach
-    public void setUp() {
-        embeddedDatabase = new EmbeddedDatabaseBuilder()
-                .setType(EmbeddedDatabaseType.H2)
-                .addScript("classpath:mydb.sql")
-                .build();
-        jdbcTemplate = new JdbcTemplate(embeddedDatabase);
-        certificateDao = new CertificateDaoImpl(jdbcTemplate);
-    }
 
     @Test
     void findAllCertificates() {
@@ -130,10 +122,5 @@ class CertificateDaoImplTest {
         Assertions.assertEquals(list.get(list.size()-1).getId(), 2);
     }
 
-    @AfterEach
-    public void endTest() {
-
-        embeddedDatabase.shutdown();
-    }
 
 }

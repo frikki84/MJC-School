@@ -19,6 +19,7 @@ public class DbConfiguration {
 
 
     @Bean
+    @Profile("prod")
     public DataSource dataSource() {
         DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
         driverManagerDataSource.setDriverClassName(DRIVER_CLASS_NAME);
@@ -28,9 +29,11 @@ public class DbConfiguration {
         return driverManagerDataSource;
     }
 
+
     @Bean
     public JdbcTemplate template(DataSource dataSource) {
-        return new JdbcTemplate(dataSource);
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+        return jdbcTemplate;
     }
 
     @Bean

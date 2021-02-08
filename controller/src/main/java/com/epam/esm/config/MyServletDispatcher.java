@@ -13,12 +13,13 @@ public class MyServletDispatcher
         extends AbstractAnnotationConfigDispatcherServletInitializer {
 
     public static final String PROD_PROFILE = "prod";
+    public static final String DEV_PROFILE = "dev";
     public static final String ACTIVE_PROFILE_PARAM = "spring.profiles.active";
 
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
         super.onStartup(servletContext);
-        servletContext.setInitParameter(ACTIVE_PROFILE_PARAM, PROD_PROFILE);
+        servletContext.setInitParameter(ACTIVE_PROFILE_PARAM, DEV_PROFILE);
     }
 
     @Override
@@ -36,11 +37,11 @@ public class MyServletDispatcher
         return new String[] {"/"};
     }
 
-    @Override
-    protected WebApplicationContext createServletApplicationContext() {
-        WebApplicationContext context = super.createServletApplicationContext();
-        ((ConfigurableEnvironment) context.getEnvironment()).setActiveProfiles(PROD_PROFILE);
-        return context;
-    }
+//    @Override
+//    protected WebApplicationContext createServletApplicationContext() {
+////        WebApplicationContext context = super.createServletApplicationContext();
+////        ((ConfigurableEnvironment) context.getEnvironment()).setActiveProfiles(DEV_PROFILE);
+//        return context;
+//    }
 
 }
