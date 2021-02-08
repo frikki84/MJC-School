@@ -14,6 +14,7 @@ import java.util.List;
 @Service
 @Transactional
 public class CertificateTagService {
+    public static final Integer FIRST_VALUE_FOR_LOOP =0;
 
     private final CertificateDtoMapper certificateMapper;
     private final TagDtoMapper tagDtoMapper;
@@ -37,7 +38,7 @@ public class CertificateTagService {
 
         List<Tag> tagList = tagDtoMapper.changeCertificateDtoToTagList(dto);
 
-        Integer resultField = 0;
+        Integer resultField = FIRST_VALUE_FOR_LOOP;
 
         for (Tag tag : tagList) {
             long tagId = 0;

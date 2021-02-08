@@ -37,18 +37,16 @@ public class CertificatesController {
     }
 
     @PostMapping()
-    @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
-    public Integer createNewCertificate(@RequestBody CertificateDto certificateDto) {
+    public Integer createNewCertificate(CertificateDto certificateDto) {
         boolean dtoChecking = CertificateDTOChecking.chechCertificateDtoFormat(certificateDto);
        Integer id =  certificateTagService.createNewCertificateWithTags(certificateDto);
        return  id;
     }
 
     @PatchMapping("/{id}")
-    @ResponseBody
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public Integer updateCertificate(@RequestBody GiftCertificate certificate, @PathVariable("id") long id)  {
+    public Integer updateCertificate(GiftCertificate certificate, @PathVariable("id") long id)  {
         Integer updatesNumber = certificateService.updateCertificate(certificate, id);
         return updatesNumber;
     }
@@ -78,8 +76,6 @@ public class CertificatesController {
         List<CertificateDto> certificateList = certificateService.findAllCertificatesByNameDescriptionPart(namePart);
         return certificateList;
     }
-
-
 }
 
 

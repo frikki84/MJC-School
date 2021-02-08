@@ -33,9 +33,8 @@ public class TagController {
     }
 
     @PostMapping()
-    @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
-    public Tag createNewTag(@RequestBody TagDto tag) {
+    public Tag createNewTag(TagDto tag) {
         boolean checkTag = TagDtoChecking.checkTAgDto(tag);
         if (!checkTag) {
             throw new TagValidationException(CustomErrorCode.TAG);

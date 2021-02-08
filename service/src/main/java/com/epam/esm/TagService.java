@@ -29,26 +29,23 @@ public class TagService {
 
     public Tag findTag(long id) {
         Tag tag = tagDao.findTag(id);
-        return  tag;
+        return tag;
     }
 
     public Tag findTag(String name) {
         Tag tag = tagDao.findTag(name);
-        return  tag;
+        return tag;
     }
 
 
     public Integer deleteTag(long id) {
         Integer fieldsNumber = tagDao.deleteTag(id);
-        return  fieldsNumber;
+        return fieldsNumber;
     }
 
-    public Tag addNewTag(TagDto tagDto){
-        System.out.println(tagDto);
+    public Tag addNewTag(TagDto tagDto) {
         Tag tag = tagDtoMapper.changeTagDtoToTag(tagDto);
-        System.out.println("Tag" + tag);
         Tag newTag = tagDao.addNewTag(tag);
-        System.out.println("tag after adding " + newTag);
         return newTag;
     }
 

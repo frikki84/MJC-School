@@ -8,9 +8,10 @@ import com.epam.esm.util.CustomErrorCode;
 import java.math.BigDecimal;
 
 public class CertificateDTOChecking {
+    public static final boolean DEFAULT_RESULT = true;
 
     public static boolean chechCertificateDtoFormat(CertificateDto dto) {
-        boolean result = true;
+        boolean result = DEFAULT_RESULT;
         if (dto.getName() == null || dto.getName().length() < 3 || dto.getName().length() >32) {
             throw new InvalidCertificateDtoName(CustomErrorCode.CERTIFICATE);
         } else if (dto.getDescription() == null || dto.getDescription().length() < 5 || dto.getDescription().length() > 100) {
