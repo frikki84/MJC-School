@@ -19,12 +19,12 @@ public class MyServletDispatcher
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
         super.onStartup(servletContext);
-        servletContext.setInitParameter(ACTIVE_PROFILE_PARAM, DEV_PROFILE);
+        servletContext.setInitParameter(ACTIVE_PROFILE_PARAM, PROD_PROFILE);
     }
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[]{DbConfiguration.class, ServiceConfig.class};
+        return new Class[]{DbConfiguration.class, TestConfiguration.class, ServiceConfig.class};
     }
 
     @Override
@@ -37,11 +37,5 @@ public class MyServletDispatcher
         return new String[] {"/"};
     }
 
-//    @Override
-//    protected WebApplicationContext createServletApplicationContext() {
-////        WebApplicationContext context = super.createServletApplicationContext();
-////        ((ConfigurableEnvironment) context.getEnvironment()).setActiveProfiles(DEV_PROFILE);
-//        return context;
-//    }
 
 }

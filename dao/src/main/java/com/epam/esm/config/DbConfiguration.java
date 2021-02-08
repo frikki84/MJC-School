@@ -29,7 +29,6 @@ public class DbConfiguration {
         return driverManagerDataSource;
     }
 
-
     @Bean
     public JdbcTemplate template(DataSource dataSource) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);

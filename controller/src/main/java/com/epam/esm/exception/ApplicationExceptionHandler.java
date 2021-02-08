@@ -30,7 +30,6 @@ public class ApplicationExceptionHandler {
     public static final String INVALID_DTO_TAG_LIST = "dto_invalid_taglist";
 
 
-
     private final ReloadableResourceBundleMessageSource resourceBundle;
 
     public ApplicationExceptionHandler(ReloadableResourceBundleMessageSource resourceBundle) {
