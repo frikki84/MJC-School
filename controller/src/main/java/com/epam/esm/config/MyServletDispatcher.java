@@ -14,6 +14,8 @@ public class MyServletDispatcher
 
     public static final String PROD_PROFILE = "prod";
     public static final String DEV_PROFILE = "dev";
+
+
     public static final String ACTIVE_PROFILE_PARAM = "spring.profiles.active";
 
     @Override
@@ -24,7 +26,7 @@ public class MyServletDispatcher
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[]{DbConfiguration.class, TestConfiguration.class, ServiceConfig.class};
+        return new Class[]{DbConfiguration.class, ServiceConfig.class};
     }
 
     @Override

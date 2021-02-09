@@ -19,8 +19,11 @@ public class TestConfiguration {
         @Bean
         public EmbeddedDatabase dataSource() {
             return new EmbeddedDatabaseBuilder()
-                    .addScript(DB_SCRIPT)
+                    .generateUniqueName(true)
                     .setType(EmbeddedDatabaseType.H2)
+                    .setScriptEncoding("UTF-8")
+                    .ignoreFailedDrops(true)
+                    .addScript(DB_SCRIPT)
                     .build();
         }
 

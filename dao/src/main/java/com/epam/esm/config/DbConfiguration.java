@@ -14,6 +14,7 @@ import javax.sql.DataSource;
 public class DbConfiguration {
     public static final String DRIVER_CLASS_NAME = "com.mysql.jdbc.Driver";
     public static final String DB_URL = "jdbc:mysql://127.0.0.1:3306/module02?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true";
+    public static final String DB_URL_DEV = "jdbc:mysql://127.0.0.1:3306/dev_certificate?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true";
     public static final String USER_NAME = "root";
     public static final String PASSWORD = "24081984";
 
@@ -24,6 +25,17 @@ public class DbConfiguration {
         DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
         driverManagerDataSource.setDriverClassName(DRIVER_CLASS_NAME);
         driverManagerDataSource.setUrl(DB_URL);
+        driverManagerDataSource.setUsername(USER_NAME);
+        driverManagerDataSource.setPassword(PASSWORD);
+        return driverManagerDataSource;
+    }
+
+    @Bean
+    @Profile("dev")
+    public DataSource dataSourceDev() {
+        DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
+        driverManagerDataSource.setDriverClassName(DRIVER_CLASS_NAME);
+        driverManagerDataSource.setUrl(DB_URL_DEV);
         driverManagerDataSource.setUsername(USER_NAME);
         driverManagerDataSource.setPassword(PASSWORD);
         return driverManagerDataSource;

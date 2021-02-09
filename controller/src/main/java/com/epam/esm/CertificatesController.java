@@ -2,8 +2,6 @@ package com.epam.esm;
 
 
 import com.epam.esm.dto.CertificateDto;
-import com.epam.esm.exception.InvalidDataException;
-import com.epam.esm.util.CustomErrorCode;
 import com.epam.esm.validation.CertificateDTOChecking;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,11 +9,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/v1/certificates")
 public class CertificatesController {
     private final CertificateService certificateService;
     private final CertificateTagService certificateTagService;
+
 
     @Autowired
     public CertificatesController(CertificateService certificateService, CertificateTagService certificateTagService) {
