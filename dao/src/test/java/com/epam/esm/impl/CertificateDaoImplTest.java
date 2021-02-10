@@ -9,6 +9,8 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -21,8 +23,8 @@ import java.util.List;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = TestConfiguration.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @ActiveProfiles("dev")
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class CertificateDaoImplTest {
     public static final int LIST_SIZE_FIND_ALL_CERTIFICATES = 4;
     public static final int ID_FIND_CERTIFICATE_BY_ID = 3;
@@ -41,6 +43,11 @@ class CertificateDaoImplTest {
 
     @Autowired
     private CertificateDao certificateDao;
+
+    @BeforeEach
+    public void beforeStart() {
+        certificateDao = new CertificateDaoImpl(new JdbcTemplate(new DriverManagerDataSource()));
+    }
 
     @Test
     void findAllCertificates() {

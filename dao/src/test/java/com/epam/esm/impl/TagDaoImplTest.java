@@ -26,7 +26,6 @@ import java.util.List;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = TestConfiguration.class)
 @ActiveProfiles("dev")
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class TagDaoImplTest {
     public static final int LIST_SIZE_FIND_ALL_TAG_LIST = 6;
     public static final int ID_FIND_TAG_BY_ID = 3;
@@ -41,8 +40,9 @@ class TagDaoImplTest {
 
     @Test
     void testFindAllTagList() {
-        Assertions.assertNotNull(tagDao.findAllTagList());
-        Assertions.assertEquals(LIST_SIZE_FIND_ALL_TAG_LIST, tagDao.findAllTagList().size());
+        List<Tag> list = tagDao.findAllTagList();
+        Assertions.assertNotNull(list);
+        Assertions.assertEquals(LIST_SIZE_FIND_ALL_TAG_LIST, list.size());
     }
 
     @Test
