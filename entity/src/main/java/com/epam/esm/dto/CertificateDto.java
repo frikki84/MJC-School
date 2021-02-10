@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Objects;
 
 
-@ResponseBody
+
 public class CertificateDto {
     private long id;
     private String name;

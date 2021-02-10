@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Objects;
 
-@ResponseBody
+
 public class TagDto {
     private long idTag;
     private String nameTag;

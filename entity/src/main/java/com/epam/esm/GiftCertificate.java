@@ -6,7 +6,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-@ResponseBody
 public class GiftCertificate {
     private long id;
     private String name;
