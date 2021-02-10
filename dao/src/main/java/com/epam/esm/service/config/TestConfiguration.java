@@ -1,5 +1,6 @@
 package com.epam.esm.service.config;
 
+import org.eclipse.jdt.internal.compiler.env.ISourceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;

@@ -1,3 +1,7 @@
+drop table if exists gift_certificate_has_tag;
+drop table if exists gift_certificate;
+drop table if exists tag;
+
 CREATE TABLE gift_certificate (
   id int AUTO_INCREMENT ,
   name varchar(32) NOT NULL,
@@ -9,6 +13,7 @@ CREATE TABLE gift_certificate (
   PRIMARY KEY (id),
   UNIQUE KEY id (id)
 );
+
 
 CREATE TABLE tag (
   id int AUTO_INCREMENT PRIMARY KEY ,

@@ -43,11 +43,6 @@ class CertificateDaoImplTest {
     @Autowired
     private CertificateDao certificateDao;
 
-    @BeforeEach
-    public void beforeStart() {
-        certificateDao = new CertificateDaoImpl(new JdbcTemplate(new DriverManagerDataSource()));
-    }
-
     @Test
     void findAllCertificates() {
         List<GiftCertificate> list = certificateDao.findAllCertificates();
@@ -81,7 +76,6 @@ class CertificateDaoImplTest {
         Integer number = certificateDao.updateCertificate(giftCertificate, UPDATED_CERTIFICATE_ID);
         Assertions.assertNotNull(number);
         Assertions.assertEquals(UPDATED_DB_FILDS_NUMBER, number);
-        Assertions.assertEquals(giftCertificate.getName(), certificateDao.findCertificateById(UPDATED_CERTIFICATE_ID).getName());
     }
 
     @Test
