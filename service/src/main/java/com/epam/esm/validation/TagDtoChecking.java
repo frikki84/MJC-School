@@ -12,7 +12,6 @@ public class TagDtoChecking {
         if (tagDto.getNameTag() == null || tagDto.getNameTag().isEmpty() || tagDto.getNameTag().isBlank()) {
             result = RESULT_AFTER_TERMS;
         }
-
         return result;
     }
 }

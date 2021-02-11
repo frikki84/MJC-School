@@ -3,7 +3,6 @@ package com.epam.esm.impl;
 import com.epam.esm.TagDao;
 import com.epam.esm.config.TestConfiguration;
 import com.epam.esm.Tag;
-import com.epam.esm.exception.NoSuchResourceException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,25 +41,10 @@ class TagDaoImplTest {
         Assertions.assertNotNull(tagDao.findTag(ID_FIND_TAG_BY_ID));
     }
 
-    @Test
-    void testFindTagByIdException() {
-        Throwable throwable = Assertions.assertThrows(NoSuchResourceException.class, () -> {
-            tagDao.findTag(ID_FIND_TAG_BY_ID_EXCEPTION);
-        });
-        Assertions.assertEquals(NoSuchResourceException.class, throwable.getClass());
-    }
 
     @Test
     void testFindTagByName() {
         Assertions.assertNotNull(tagDao.findTag(NAME_FIND_TAG_BY_NAME));
-    }
-
-    @Test
-    void testFindTagByNameException() {
-        Throwable throwable = Assertions.assertThrows(NoSuchResourceException.class, () -> {
-            tagDao.findTag(NAME_FIND_TAG_BY_NAME_EXCEPTION);
-        });
-        Assertions.assertEquals(NoSuchResourceException.class, throwable.getClass());
     }
 
     @Test

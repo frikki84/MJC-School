@@ -2,8 +2,6 @@ package com.epam.esm.impl;
 import com.epam.esm.CertificateDao;
 import com.epam.esm.config.TestConfiguration;
 import com.epam.esm.GiftCertificate;
-import com.epam.esm.exception.NoSuchResourceException;
-import com.epam.esm.exception.NoUserTag;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -55,12 +53,6 @@ class CertificateDaoImplTest {
         Assertions.assertEquals(ID_FIND_CERTIFICATE_BY_ID, certificate.getId());
     }
 
-    @Test
-    void findCertificateByIdWrong() {
-        Throwable throwable = Assertions.assertThrows(NoSuchResourceException.class, () ->
-                certificateDao.findCertificateById(ID_FIND_CERTIFICATE_BY_ID_EXCEPTION));
-        Assertions.assertEquals(NoSuchResourceException.class, throwable.getClass());
-    }
 
     @Test
     void createNewCertificate() {
@@ -76,12 +68,6 @@ class CertificateDaoImplTest {
         Assertions.assertEquals(UPDATED_DB_FILDS_NUMBER, number);
     }
 
-    @Test
-    void updateCertificateWrongId() {
-         Throwable throwable = Assertions.assertThrows(NoSuchResourceException.class, () ->
-                certificateDao.updateCertificate(giftCertificate, UPDATED_CERTIFICATE_WRONG_ID));
-        Assertions.assertEquals(NoSuchResourceException.class, throwable.getClass());
-    }
 
     @Test
     void deleteCertificate() {
@@ -92,26 +78,12 @@ class CertificateDaoImplTest {
     }
 
     @Test
-    void deleteCertificateWrongId() {
-        Throwable throwable = Assertions.assertThrows(NoSuchResourceException.class, () -> {
-            certificateDao.findCertificateById(UPDATED_CERTIFICATE_WRONG_ID);
-        });
-        Assertions.assertEquals(NoSuchResourceException.class, throwable.getClass());
-    }
-
-    @Test
     void findCertificatesByTag() {
               List<GiftCertificate> list = certificateDao.findCertificatesByTag(TAG_NAME);
         Assertions.assertNotNull(list);
         Assertions.assertEquals(2, list.size());
     }
 
-    @Test
-    void findCertificatesByTagWrongTag() {
-        Throwable throwable = Assertions.assertThrows(NoUserTag.class, () ->
-                certificateDao.findCertificatesByTag(WRONG_TAG_NAME));
-        Assertions.assertEquals(NoUserTag.class, throwable.getClass());
-    }
 
     @Test
     void findCertificatesOrderedByNameAsc() {

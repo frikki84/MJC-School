@@ -49,9 +49,7 @@ public class TagService {
 
 
     public Tag addNewTag(Tag tag) {
-
             Tag newTag = tagDao.addNewTag(tag);
-
         return newTag;
     }
 

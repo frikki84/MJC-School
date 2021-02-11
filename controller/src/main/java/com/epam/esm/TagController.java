@@ -1,6 +1,7 @@
 package com.epam.esm;
 
 import com.epam.esm.dto.TagDto;
+import com.epam.esm.exception.NoSuchResourceException;
 import com.epam.esm.exception.TagValidationException;
 import com.epam.esm.exception.TagAlreadyExistsException;
 import com.epam.esm.util.CustomErrorCode;
@@ -27,9 +28,13 @@ public class TagController {
         return fullTagList;
     }
 
-    @GetMapping("/{name}")
-    public Tag findTag(@PathVariable("name") String name) {
-        Tag tag = tagService.findTag(name);
+    @GetMapping("/{id}")
+    public Tag findTag(@PathVariable("id") int id) {
+        Tag tag = tagService.findTag(id);
+
+        if (tag == null) {
+            throw new NoSuchResourceException(CustomErrorCode.TAG);
+        }
         return tag;
     }
 
@@ -51,7 +56,10 @@ public class TagController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     public Integer deleteCertificate(@PathVariable("id") int id) {
         Integer fields = tagService.deleteTag(id);
-        return  fields;
+        if (fields == null | fields == 0) {
+            throw new NoSuchResourceException(CustomErrorCode.TAG);
+        }
+        return fields;
     }
 
 

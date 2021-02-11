@@ -25,6 +25,5 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
     implementation project(':service')
     implementation project(':entity')
-    implementation project(':dao')
 }
 

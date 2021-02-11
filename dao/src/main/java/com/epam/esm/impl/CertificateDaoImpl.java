@@ -2,9 +2,6 @@ package com.epam.esm.impl;
 
 import com.epam.esm.CertificateDao;
 import com.epam.esm.GiftCertificate;
-import com.epam.esm.exception.NoSuchResourceException;
-import com.epam.esm.exception.NoUserTag;
-import com.epam.esm.util.CustomErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.*;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -52,15 +49,11 @@ public class CertificateDaoImpl implements CertificateDao {
         GiftCertificate certificate = template.query(SQL_QUERY_READ_ONE_CERTIFICATE
                 , new Object[]{id}, new BeanPropertyRowMapper<>(GiftCertificate.class))
                 .stream().findAny().orElse(null);
-        if (certificate == null) {
-                throw  new NoSuchResourceException(CustomErrorCode.CERTIFICATE);
-        }
         return certificate;
     }
 
     public Integer createNewCertificate(GiftCertificate certificate) {
         KeyHolder generatedKeyHolder = new GeneratedKeyHolder();
-        try {
             template.update(connection -> {
                 PreparedStatement ps = connection
                         .prepareStatement(SQL_QUERY_INSERT_CERTIFICATE, Statement.RETURN_GENERATED_KEYS);
@@ -73,28 +66,20 @@ public class CertificateDaoImpl implements CertificateDao {
                 return ps;
 
             }, generatedKeyHolder);
-        } catch (Exception e) {
-            throw  new NoSuchResourceException(CustomErrorCode.CERTIFICATE);
+            Integer key = (generatedKeyHolder.getKey()).intValue();
+            return key;
         }
-        Integer key = (generatedKeyHolder.getKey()).intValue();
-        return key;
-    }
+
 
     public Integer updateCertificate(GiftCertificate updatedCertificate, long id) {
         Integer fildsNumber = template.update(SQL_QUERY_UPDATE_CERTIFICATE, updatedCertificate.getName(), updatedCertificate.getDescription()
                 , updatedCertificate.getPrice(), updatedCertificate.getDuration(), updatedCertificate.getCreateDate()
                 , updatedCertificate.getLastUpdateDate(), id);
-        if (fildsNumber == null || fildsNumber == 0) {
-            throw new NoSuchResourceException(CustomErrorCode.CERTIFICATE);
-        }
         return  fildsNumber;
     }
 
     public Integer deleteCertificate(long id) {
        Integer deleteFields =  template.update(SQL_QUERY_DELETE_CERTIFICATE, id);
-       if (deleteFields == null || deleteFields == 0) {
-           throw new NoSuchResourceException(CustomErrorCode.CERTIFICATE);
-       }
        return  deleteFields;
 
     }
@@ -116,9 +101,6 @@ public class CertificateDaoImpl implements CertificateDao {
                         return c;
                     }
                 });
-         if (resultList.isEmpty()) {
-             throw new NoUserTag(CustomErrorCode.CERTIFICATE);
-         }
         return resultList;
     }
 
@@ -131,7 +113,6 @@ public class CertificateDaoImpl implements CertificateDao {
     public List<GiftCertificate> findCertificatesByNameOrDescriptionPart(String namePart) {
         List<GiftCertificate> certificateList = new ArrayList<>();
         Map<String, Object> out = searchCertificatesWithTags(namePart);
-        System.out.println("Map" + out);
         List<Map<String, Object>> results = (List<Map<String, Object>>) out.get(MAP_KEY_NAME_PROCEDURE);
         results.stream().forEach(c -> {
             GiftCertificate ct = new GiftCertificate();

@@ -12,7 +12,9 @@ import java.util.List;
 public class TagDtoMapperImpl implements TagDtoMapper {
     @Override
     public Tag changeTagDtoToTag(TagDto tagDto) {
-        Tag tag = new Tag(tagDto.getIdTag(), tagDto.getNameTag());
+        Tag tag = new Tag();
+        tag.setId(tagDto.getIdTag());
+        tag.setNameTag(tagDto.getNameTag());
         return tag;
     }
 

@@ -2,8 +2,6 @@ package com.epam.esm;
 
 import com.epam.esm.dto.TagDto;
 import com.epam.esm.mapper.TagDtoMapper;
-import com.epam.esm.exception.NoSuchResourceException;
-import com.epam.esm.util.CustomErrorCode;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,17 +42,6 @@ class TagServiceTest {
         Tag tag = tagService.findTag(id);
         Assertions.assertNotNull(tag);
         Assertions.assertEquals(expectedTag, tag);
-
-    }
-
-    @Test
-    void findTagException() {
-        long id = 100;
-        Mockito.when(tagDao.findTag(id)).thenThrow(new NoSuchResourceException(CustomErrorCode.TAG));
-        Throwable throwable = Assertions.assertThrows(NoSuchResourceException.class, () -> {
-            tagService.findTag(id);
-        });
-        Assertions.assertEquals(NoSuchResourceException.class, throwable.getClass());
 
     }
 

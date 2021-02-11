@@ -3,7 +3,6 @@ package com.epam.esm.validation;
 import com.epam.esm.dto.CertificateDto;
 import com.epam.esm.Tag;
 import com.epam.esm.exception.*;
-import com.epam.esm.service.exception.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

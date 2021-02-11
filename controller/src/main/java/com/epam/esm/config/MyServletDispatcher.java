@@ -24,7 +24,7 @@ public class MyServletDispatcher
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[]{ControllerConfig.class, DbConfiguration.class, ServiceConfig.class, TestConfiguration.class};
+        return new Class[]{ControllerConfig.class};
     }
 
     @Override

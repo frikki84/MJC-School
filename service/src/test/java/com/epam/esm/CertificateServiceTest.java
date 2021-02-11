@@ -1,7 +1,6 @@
 package com.epam.esm;
 
 import com.epam.esm.mapper.CertificateDtoMapper;
-import com.epam.esm.exception.NoSuchResourceException;
 import com.epam.esm.util.CustomErrorCode;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -55,11 +54,11 @@ class CertificateServiceTest {
 
     @Test
     void findCertificateByIdException() {
-        Mockito.when(certificateDao.findCertificateById(1000)).thenThrow(new NoSuchResourceException(CustomErrorCode.CERTIFICATE));
-        Throwable throwable = Assertions.assertThrows(NoSuchResourceException.class, () -> {
+        Mockito.when(certificateDao.findCertificateById(1000)).thenThrow(new Exception());
+        Throwable throwable = Assertions.assertThrows(Exception.class, () -> {
             certificateService.findCertificateById(1000);
         });
-        Assertions.assertEquals(NoSuchResourceException.class, throwable.getClass());
+        Assertions.assertEquals(Exception.class, throwable.getClass());
     }
 
     @Test
@@ -95,12 +94,12 @@ class CertificateServiceTest {
         GiftCertificate newCertificate = new GiftCertificate();
         newCertificate.setPrice(new BigDecimal(150));
 
-        Mockito.when(certificateDao.findCertificateById(10)).thenThrow(new NoSuchResourceException(CustomErrorCode.CERTIFICATE));
+        Mockito.when(certificateDao.findCertificateById(10)).thenThrow(new Exception());
 
-        Throwable throwable = Assertions.assertThrows(NoSuchResourceException.class, () -> {
+        Throwable throwable = Assertions.assertThrows(Exception.class, () -> {
             certificateService.updateCertificate(newCertificate, 10);
         });
-        Assertions.assertEquals(NoSuchResourceException.class, throwable.getClass());
+        Assertions.assertEquals(Exception.class, throwable.getClass());
     }
 
     @Test

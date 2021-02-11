@@ -3,8 +3,6 @@ package com.epam.esm.impl;
 
 import com.epam.esm.Tag;
 import com.epam.esm.TagDao;
-import com.epam.esm.exception.NoSuchResourceException;
-import com.epam.esm.util.CustomErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -48,9 +46,6 @@ public class TagDaoImpl implements TagDao {
         Tag tag = template.query(SQL_QUERY_READ_ONE_TAG_BY_ID
                 , new Object[]{id}, new BeanPropertyRowMapper<>(Tag.class))
                 .stream().findAny().orElse(null);
-        if (tag == null) {
-            throw new NoSuchResourceException(CustomErrorCode.TAG);
-        }
         return  tag;
     }
 
@@ -59,26 +54,19 @@ public class TagDaoImpl implements TagDao {
         Tag tag = template.query(SQL_QUERY_READ_ONE_TAG_BY_NAME
                     , new Object[]{name}, new BeanPropertyRowMapper<>(Tag.class))
                     .stream().findAny().orElse(null);
-       if (tag == null) {
-            throw  new NoSuchResourceException(CustomErrorCode.TAG);
-        }
         return  tag;
     }
 
     @Override
     public Tag addNewTag(Tag tag){
         KeyHolder generatedKeyHolder = new GeneratedKeyHolder();
-//        try {
             template.update(connection -> {
                 PreparedStatement ps = connection
                         .prepareStatement(SQL_QUERY_INSERT_TAG, Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, tag.getNameTag());
                 return ps;
-
             }, generatedKeyHolder);
-//        } catch (Exception e) {
-//            throw new TagAlreadyExistsException(CustomErrorCode.TAG);
-//        }
+
         Long key = (generatedKeyHolder.getKey()).longValue();
         tag.setId(key);
         return tag;
@@ -87,9 +75,6 @@ public class TagDaoImpl implements TagDao {
     @Override
     public Integer deleteTag(long id) {
         Integer fildsNumber = template.update(SQL_QUERY_DELETE_TAG, id);
-        if (fildsNumber == null | fildsNumber == 0) {
-            throw  new NoSuchResourceException(CustomErrorCode.TAG);
-        }
         return fildsNumber;
     }
 
